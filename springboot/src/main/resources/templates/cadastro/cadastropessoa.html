@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<head>
+<!--Import Google Icon Font-->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
+<!--Import materialize.css-->
+<link type="text/css" rel="stylesheet"
+	href="/materialize/css/materialize.css" media="screen,projection" />
+
+<!--Import materialize.css-->
+<link type="text/css" rel="stylesheet"
+	href="/materialize/css/materialize.min.css" media="screen,projection" />
+
+
+<!--Let browser know website is optimized for mobile-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+</head>
+<body>
+	<h3>Spring Boot + Thymeleaf + MaterialDesignLite</h3><br>
+	<h5>Cadatro de pessoas</h5>
+	
+	<div th:each="m : ${msg}">
+		<p th:text ="${m}"/>
+	</div>
+	
+	<div class="row">
+		<!-- th:object -> Defino o objeto que será utilizado em th:object -->
+		<!-- -> Defino o campo que será utilizado em th:field passando * e o nome do atributo -->
+		<form action="salvarpessoa" method="post" th:object="${pessoaobj}" class="col s12">
+			<div class="row">		
+				<div class="input-fil col s6">
+					<label for="id" class="active">Id</label>
+					<input name="id" th:field="*{id}" readonly="readonly">
+				</div>
+				<div class="input-fil col s6">
+					<label for="nome" class="active">Nome</label>
+					<input name="nome" th:field="*{nome}">
+				</div> 
+			</div>
+			
+			<br /> 
+			<label>Sobrenome</label>
+			<input	name="sobrenome" th:field="*{sobrenome}"> 
+			<br />
+			<div sec:authorize="hasRole('ROLE_ADMIN')">
+				<label>Idade</label> 
+				<input name="idade" th:field="*{idade}">
+			</div>
+			<input type="submit" value="salvar" class="waves-effect waves-light btn">
+			
+		</form>
+	</div>	
+	
+	<br>
+	<form action="pesquisar" method="post" style="margin-bottom: 20px;margin-top: 20px">
+		<label>Pesquisar por nome: </label>
+		<input name="nomepesquisa" type="text">
+		<input type="submit" value="Buscar" class="waves-effect waves-light btn">
+	</form>
+	<br>
+	
+	<a href="/listapessoas" style="background-color:tomato;color:white;padding:10px;border-radius: 5px;">Listar as pessoas</a>
+	<br><br><br>
+	
+	<table style="margin-top: 12px;margin-bottom:100px" sec:authorize="hasRole('ROLE_ADMIN')">
+		<tr>
+			<th>Codigo Usuario</th>
+			<th>Nome</th>
+			<th>Sobrenome</th>
+			<th>idade</th>
+			<th>Editar</th>
+			<th>Excluir</th>
+		</tr>
+		<tr th:each="pessoa: ${pessoas}">
+			<td th:text="${pessoa.id}" />
+			<td><a th:href="@{/telefones/{id}(id=${pessoa.id})}">
+					<span th:text="${pessoa.nome}"></span>
+				</a>
+			<th />
+			<td th:text="${pessoa.sobrenome}"/>
+			<td th:text="${pessoa.idade}"/>
+			
+			<!-- Como montar a url em forma de parâmetro -->
+			<!-- primeiro -> @{controller}/{nomeDaVariavel}(atribuiçãoDeValoresDaVariável) -->
+			
+			<td><a th:href="@{/editarpessoa/{id}(id=${pessoa.id})}">Editar</a></td>
+			<td><a th:href="@{/excluirpessoa/{id}(id=${pessoa.id})}">Excluir</a></td>
+		</tr>
+	</table>
+
+<!--JavaScript at end of body for optimized loading-->
+      <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+      <script type="text/javascript" src="materialize/js/materializes.js"></script>
+</body>
+</html>
