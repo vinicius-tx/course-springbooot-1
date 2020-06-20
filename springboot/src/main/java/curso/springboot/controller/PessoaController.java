@@ -33,6 +33,7 @@ public class PessoaController {
 	
 	Pessoa pessoa = new Pessoa();
 
+	// Comentario
 	@RequestMapping(method = RequestMethod.GET, value = "/cadastropessoa")
 	public ModelAndView inicio() {
 		
